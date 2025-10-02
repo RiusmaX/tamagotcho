@@ -7,16 +7,51 @@ import Button from '../button'
 
 function AuthFormContent (): React.ReactNode {
   const [isSignIn, setIsSignIn] = useState<boolean>(true)
+  const [error, setError] = useState<string>('')
+
   return (
-    <div>
-      {isSignIn ? <SignInForm /> : <SignUpForm />}
-      <Button
-        type='button'
-        variant='ghost'
-        onClick={() => setIsSignIn(!isSignIn)}
-      >
-        {isSignIn ? 'Create an account' : 'Already have an account?'}
-      </Button>
+    <div className='space-y-6'>
+      {/* Error display */}
+      {(error.length > 0) && (
+        <div className='bg-red-50 border-l-4 border-red-400 p-4 rounded-r-xl animate-pulse'>
+          <div className='flex items-center'>
+            <span className='text-red-400 mr-2'>⚠️</span>
+            <p className='text-red-700 text-sm font-medium'>{error}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Form container with smooth transition */}
+      <div className='relative'>
+        <div className={`transition-all duration-500 transform ${
+          isSignIn ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 absolute inset-0'
+          }`}
+        >
+          {isSignIn && <SignInForm onError={setError} />}
+        </div>
+
+        <div className={`transition-all duration-500 transform ${
+          !isSignIn ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 absolute inset-0'
+          }`}
+        >
+          {!isSignIn && <SignUpForm onError={setError} />}
+        </div>
+      </div>
+
+      {/* Toggle button */}
+      <div className='text-center pt-4 border-t border-gray-200'>
+        <Button
+          type='button'
+          variant='ghost'
+          size='sm'
+          onClick={() => {
+            setError('') // Clear errors when switching
+            setIsSignIn(!isSignIn)
+          }}
+        >
+          {isSignIn ? '🆕 Créer un compte' : '🔐 J\'ai déjà un compte'}
+        </Button>
+      </div>
     </div>
   )
 }
