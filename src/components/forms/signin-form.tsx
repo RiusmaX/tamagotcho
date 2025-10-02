@@ -57,14 +57,14 @@ function SignInForm ({ onError }: { onError: (error: string) => void }): React.R
           type='email'
           name='email'
           value={credentials.email}
-          onChangeText={(text) => setCredentials({ ...credentials, email: text })}
+          onChangeText={(text: string) => setCredentials({ ...credentials, email: text })}
         />
         <InputField
           label='Mot de passe'
           type='password'
           name='password'
           value={credentials.password}
-          onChangeText={(text) => setCredentials({ ...credentials, password: text })}
+          onChangeText={(text: string) => setCredentials({ ...credentials, password: text })}
         />
         <Button
           type='submit'

@@ -22,20 +22,18 @@ function AuthFormContent (): React.ReactNode {
       )}
 
       {/* Form container with smooth transition */}
-      <div className='relative'>
-        <div className={`transition-all duration-500 transform ${
-          isSignIn ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 absolute inset-0'
-          }`}
-        >
-          {isSignIn && <SignInForm onError={setError} />}
-        </div>
-
-        <div className={`transition-all duration-500 transform ${
-          !isSignIn ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 absolute inset-0'
-          }`}
-        >
-          {!isSignIn && <SignUpForm onError={setError} />}
-        </div>
+      <div className='transition-all duration-300 ease-in-out'>
+        {isSignIn
+          ? (
+            <div className='animate-in fade-in duration-300'>
+              <SignInForm onError={setError} />
+            </div>
+            )
+          : (
+            <div className='animate-in fade-in duration-300'>
+              <SignUpForm onError={setError} />
+            </div>
+            )}
       </div>
 
       {/* Toggle button */}
