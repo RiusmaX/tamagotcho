@@ -1,6 +1,8 @@
 import AuthFormContent from '@/components/forms/auth-form-content'
+import { connectToDatabase } from '@/db'
 
-function SignInPage (): React.ReactNode {
+async function SignInPage (): Promise<React.ReactNode> {
+  await connectToDatabase()
   return (
     <AuthFormContent />
   )
