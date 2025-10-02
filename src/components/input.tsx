@@ -1,21 +1,33 @@
 function InputField ({
   type,
   name,
+  label,
   value,
-  onChange
+  onChange,
+  onChangeText
 }: {
-  type: string
-  name: string
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  type?: string
+  name?: string
+  label?: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeText?: (text: string) => void
 }): React.ReactNode {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    if (onChange !== undefined) onChange(e)
+    if (onChangeText !== undefined) onChangeText(e.target.value)
+  }
+
   return (
-    <input
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-    />
+    <label>
+      {label}
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={handleChange}
+      />
+    </label>
   )
 }
 
