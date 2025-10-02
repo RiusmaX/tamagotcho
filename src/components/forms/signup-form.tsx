@@ -11,9 +11,9 @@ interface Credentials {
 
 function SignUpForm ({ onError }: { onError: (error: string) => void }): React.ReactNode {
   const [credentials, setCredentials] = useState<Credentials>({
-    email: 'test@example.com',
-    password: 'password123',
-    name: 'Joueur Tamagotcho'
+    email: '',
+    password: '',
+    name: ''
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -26,7 +26,7 @@ function SignUpForm ({ onError }: { onError: (error: string) => void }): React.R
       email: credentials.email,
       password: credentials.password,
       name: credentials.name,
-      callbackURL: '/sign-in'
+      callbackURL: '/dashboard'
     }, {
       onRequest: (ctx) => {
         console.log('Signing up...', ctx)

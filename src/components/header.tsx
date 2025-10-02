@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Button from '@/components/button'
 import type { NavigationItem } from '@/types/components'
@@ -11,6 +13,10 @@ export default function Header (): React.ReactNode {
     { href: '#actions', label: 'Actions' },
     { href: '#newsletter', label: 'Newsletter' }
   ]
+
+  const handleSignin = (): void => {
+    window.location.href = '/sign-in'
+  }
 
   return (
     <header className='bg-white shadow-sm sticky top-0 z-50'>
@@ -50,7 +56,7 @@ export default function Header (): React.ReactNode {
 
           {/* CTA Button */}
           <div className='flex items-center'>
-            <Button variant='primary' size='md'>
+            <Button variant='primary' size='md' onClick={handleSignin}>
               Créer mon monstre
             </Button>
           </div>

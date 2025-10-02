@@ -10,8 +10,8 @@ interface Credentials {
 
 function SignInForm ({ onError }: { onError: (error: string) => void }): React.ReactNode {
   const [credentials, setCredentials] = useState<Credentials>({
-    email: 'cacahouette72@gmail.com',
-    password: 'password123'
+    email: '',
+    password: ''
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -23,7 +23,7 @@ function SignInForm ({ onError }: { onError: (error: string) => void }): React.R
     void authClient.signIn.email({
       email: credentials.email,
       password: credentials.password,
-      callbackURL: '/' // Redirection vers la page d'accueil après connexion
+      callbackURL: '/dashboard'
     }, {
       onRequest: (ctx) => {
         console.log('Signing in...', ctx)
