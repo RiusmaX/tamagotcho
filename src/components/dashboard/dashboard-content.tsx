@@ -1,7 +1,8 @@
 'use client'
 import { useState } from 'react'
 import Button from '../button'
-import CreateMonsterModal, { type CreateMonsterFormValues } from './create-monster-modal'
+import CreateMonsterModal from './create-monster-modal'
+import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
 import { authClient } from '@/lib/auth-client'
 
 type Session = typeof authClient.$Infer.Session

@@ -1,7 +1,8 @@
 'use client'
 
 import Button from '../button'
-import CreateMonsterForm, { type CreateMonsterFormValues } from '../forms/create-monster-form'
+import CreateMonsterForm from '../forms/create-monster-form'
+import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
 
 interface CreateMonsterModalProps {
   isOpen: boolean

@@ -9,7 +9,8 @@ const monsterSchema = new Schema({
   },
   level: {
     type: Number,
-    required: true
+    required: false,
+    default: 1
   },
   draw: {
     type: String,
@@ -18,7 +19,8 @@ const monsterSchema = new Schema({
   state: {
     type: String,
     required: true,
-    enum: ['happy', 'sad', 'angry', 'hungry', 'sleepy']
+    enum: ['happy', 'sad', 'angry', 'hungry', 'sleepy'],
+    default: 'happy'
   },
   ownerId: {
     type: Schema.Types.ObjectId,
