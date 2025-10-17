@@ -5,10 +5,11 @@ import CreateMonsterModal from './create-monster-modal'
 import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
 import { authClient } from '@/lib/auth-client'
 import { createMonster } from '@/actions/monsters.actions'
+import MonstersList from '../monsters/monsters-list'
 
 type Session = typeof authClient.$Infer.Session
 
-function DashboardContent ({ session }: { session: Session }): React.ReactNode {
+function DashboardContent ({ session, monsters }: { session: Session, monsters: Monster[] }): React.ReactNode {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleLogout = (): void => {
@@ -35,6 +36,7 @@ function DashboardContent ({ session }: { session: Session }): React.ReactNode {
       <Button onClick={handleCreateMonster}>
         Créer une créature
       </Button>
+      <MonstersList monsters={monsters} />
       <p className='text-lg text-gray-600'>Ici, vous pouvez gérer vos créatures et suivre votre progression.</p>
       <Button onClick={handleLogout}>
         Se déconnecter
