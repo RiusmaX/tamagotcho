@@ -4,6 +4,7 @@ import { connectMongooseToDatabase } from '@/db'
 import Monster from '@/db/models/monster.model'
 import { auth } from '@/lib/auth'
 import { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
+import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 
 export async function createMonster (monsterData: CreateMonsterFormValues): Promise<void> {
@@ -23,6 +24,7 @@ export async function createMonster (monsterData: CreateMonsterFormValues): Prom
   })
 
   await monster.save()
+  revalidatePath('/dashboard')
 }
 
 export async function getMonsters (): Promise<Monster[]> {
