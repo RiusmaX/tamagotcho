@@ -1,12 +1,12 @@
-import { DEFAULT_MONSTER_LEVEL, DEFAULT_MONSTER_STATE } from '@/types/monster'
+import { DEFAULT_MONSTER_LEVEL, DEFAULT_MONSTER_STATE, type MonsterDesign } from '@/types/monster'
 import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
+import { serializeMonsterDesign } from '../../services/monsters/monster-generator'
 
 export interface CreateMonsterFormDraft {
   name: string
-  draw: string
 }
 
-export type CreateMonsterFormErrors = Partial<Record<keyof CreateMonsterFormDraft, string>>
+export type CreateMonsterFormErrors = Partial<Record<'name' | 'design', string>>
 
 export interface CreateMonsterFormValidationResult {
   errors: CreateMonsterFormErrors
@@ -14,22 +14,21 @@ export interface CreateMonsterFormValidationResult {
 }
 
 export const createInitialFormState = (): CreateMonsterFormDraft => ({
-  name: '',
-  draw: ''
+  name: ''
 })
 
 export const validateCreateMonsterForm = (
-  draft: CreateMonsterFormDraft
+  draft: CreateMonsterFormDraft,
+  design: MonsterDesign | null
 ): CreateMonsterFormValidationResult => {
   const trimmedName = draft.name.trim()
-  const trimmedDraw = draft.draw.trim()
 
   const errors: CreateMonsterFormErrors = {}
 
   if (trimmedName.length === 0) errors.name = 'Le nom est requis.'
-  if (trimmedDraw.length === 0) errors.draw = 'Le dessin est requis.'
+  if (design == null) errors.design = 'Générez votre créature avant de poursuivre.'
 
-  if (Object.keys(errors).length > 0) {
+  if (Object.keys(errors).length > 0 || design == null) {
     return { errors }
   }
 
@@ -37,7 +36,7 @@ export const validateCreateMonsterForm = (
     errors: {},
     values: {
       name: trimmedName,
-      draw: trimmedDraw,
+      draw: serializeMonsterDesign(design),
       level: DEFAULT_MONSTER_LEVEL,
       state: DEFAULT_MONSTER_STATE
     }

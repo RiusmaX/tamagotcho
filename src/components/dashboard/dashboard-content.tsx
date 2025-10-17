@@ -4,6 +4,7 @@ import Button from '../button'
 import CreateMonsterModal from './create-monster-modal'
 import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
 import { authClient } from '@/lib/auth-client'
+import { createMonster } from '@/actions/monsters.actions'
 
 type Session = typeof authClient.$Infer.Session
 
@@ -23,8 +24,9 @@ function DashboardContent ({ session }: { session: Session }): React.ReactNode {
     setIsModalOpen(false)
   }
 
-  const handleMonsterSubmit = (values: CreateMonsterFormValues): void => {
+  const handleMonsterSubmit = async (values: CreateMonsterFormValues): Promise<void> => {
     void values
+    await createMonster(values)
   }
 
   return (
