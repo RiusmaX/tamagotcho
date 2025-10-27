@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Jersey_10, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ToastContainer } from 'react-toastify'
-import SwRegister from '@/components/SwRegister'
 
 const jersey10 = Jersey_10({
   variable: '--font-jersey10',
@@ -41,7 +40,6 @@ export default function RootLayout ({
         className={`${jersey10.variable} ${geistMono.variable} antialiased font-sans`}
       >
         {children}
-        <SwRegister />
         <ToastContainer />
       </body>
     </html>
