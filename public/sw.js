@@ -22,7 +22,7 @@ function startRecurringLog () {
 
     self._tamagotchoInterval = setInterval(() => {
       console.log('[SW] tick', new Date().toISOString())
-    }, 1_000)
+    }, 10_000)
   } catch (err) {
     console.error('[SW] failed to start interval', err)
   }
