@@ -6,6 +6,7 @@ import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
 import { authClient } from '@/lib/auth-client'
 import { createMonster } from '@/actions/monsters.actions'
 import MonstersList, { type DashboardMonster } from '../monsters/monsters-list'
+import { DBMonster } from '@/types/monster'
 
 type Session = typeof authClient.$Infer.Session
 
@@ -31,7 +32,7 @@ const deriveDisplayName = (session: Session): string => {
   return 'Gardien.ne'
 }
 
-function DashboardContent ({ session, monsters }: { session: Session, monsters: DashboardMonster[] }): React.ReactNode {
+function DashboardContent ({ session, monsters }: { session: Session, monsters: DBMonster[] }): React.ReactNode {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const displayName = useMemo(() => deriveDisplayName(session), [session])
