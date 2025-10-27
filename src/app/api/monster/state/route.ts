@@ -1,4 +1,4 @@
-import { connectMongooseToDatabase, connectToDatabase } from '@/db'
+import { connectMongooseToDatabase } from '@/db'
 import Monster from '@/db/models/monster.model'
 import { type NextRequest } from 'next/server'
 
