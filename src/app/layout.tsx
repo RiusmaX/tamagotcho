@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DynaPuff, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import { ToastContainer } from 'react-toastify'
 
 const dynaPuff = DynaPuff({
   variable: '--font-dynapuff',
@@ -38,6 +39,7 @@ export default function RootLayout ({
         className={`${dynaPuff.variable} ${geistMono.variable} antialiased font-sans`}
       >
         {children}
+        <ToastContainer />
       </body>
     </html>
   )
