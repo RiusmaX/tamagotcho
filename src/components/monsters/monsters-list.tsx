@@ -1,19 +1,16 @@
-import { MonsterPreview } from '@/components/monsters'
+import { PixelMonster } from '@/components/monsters'
 import {
   DEFAULT_MONSTER_STATE,
   MONSTER_STATES,
-  type MonsterDesign,
-  type MonsterState,
-  type MonsterVariantId,
-  type MonsterBodyShape,
-  type MonsterDesignStyle
+  type MonsterTraits,
+  type MonsterState
 } from '@/types/monster'
 
 export interface DashboardMonster {
   id?: string
   _id?: string
   name: string
-  draw: string
+  traits: string
   level?: number | null
   state?: MonsterState | string | null
   createdAt?: string
@@ -46,62 +43,44 @@ const MONSTER_STATE_EMOJI: Record<MonsterState, string> = {
   sleepy: '😴'
 }
 
-const VARIANT_LABELS: Record<MonsterVariantId, string> = {
-  cat: 'Variante féline',
-  dog: 'Variante canine',
-  rabbit: 'Variante lapine',
-  panda: 'Variante panda'
+const BODY_STYLE_LABELS: Record<MonsterTraits['bodyStyle'], string> = {
+  round: 'Corps arrondi',
+  square: 'Corps carré',
+  tall: 'Corps élancé',
+  wide: 'Corps large'
 }
 
-const BODY_SHAPE_LABELS: Record<MonsterBodyShape, string> = {
-  round: 'silhouette ronde',
-  oval: 'silhouette ovale',
-  bean: 'silhouette haricot',
-  square: 'silhouette carrée',
-  pear: 'silhouette poire'
+const EYE_STYLE_LABELS: Record<MonsterTraits['eyeStyle'], string> = {
+  big: 'Grands yeux',
+  small: 'Petits yeux',
+  star: 'Yeux étoilés',
+  sleepy: 'Yeux endormis'
 }
 
-const DESIGN_STYLE_LABELS: Record<MonsterDesignStyle, string> = {
-  illustrated: 'Illustration animée',
-  pixel: 'Pixel art dynamique'
+const ANTENNA_STYLE_LABELS: Record<MonsterTraits['antennaStyle'], string> = {
+  single: 'Antenne unique',
+  double: 'Deux antennes',
+  curly: 'Antennes bouclées',
+  none: 'Sans antennes'
 }
 
-const EAR_LABELS: Record<MonsterDesign['features']['earShape'], string> = {
-  pointy: 'oreilles pointues',
-  droopy: 'oreilles tombantes',
-  long: 'oreilles allongées',
-  round: 'oreilles rondes'
-}
-
-const TAIL_LABELS: Record<MonsterDesign['features']['tailShape'], string> = {
-  long: 'queue longue',
-  short: 'queue courte',
-  puff: 'queue pompon',
-  none: 'sans queue'
-}
-
-const MUZZLE_LABELS: Record<MonsterDesign['features']['muzzle'], string> = {
-  small: 'petit museau',
-  medium: 'museau médian',
-  flat: 'museau plat'
-}
-
-const MARKING_LABELS: Record<MonsterDesign['features']['markings'], string> = {
-  plain: 'pelage uni',
-  mask: 'masque facial',
-  patch: 'patch contrasté'
+const ACCESSORY_LABELS: Record<MonsterTraits['accessory'], string> = {
+  horns: 'Cornes',
+  ears: 'Oreilles',
+  tail: 'Queue',
+  none: 'Sans accessoires'
 }
 
 const isMonsterState = (value: MonsterState | string | null | undefined): value is MonsterState => (
   typeof value === 'string' && MONSTER_STATES.includes(value as MonsterState)
 )
 
-const parseMonsterDesign = (rawDraw: string): MonsterDesign | null => {
-  if (typeof rawDraw !== 'string' || rawDraw.trim().length === 0) return null
+const parseMonsterTraits = (rawTraits: string): MonsterTraits | null => {
+  if (typeof rawTraits !== 'string' || rawTraits.trim().length === 0) return null
   try {
-    return JSON.parse(rawDraw) as MonsterDesign
+    return JSON.parse(rawTraits) as MonsterTraits
   } catch (error) {
-    console.error('Unable to parse monster design', error)
+    console.error('Unable to parse monster traits', error)
     return null
   }
 }
@@ -117,17 +96,15 @@ const formatAdoptionDate = (value: string | undefined): string | null => {
   }).format(date)
 }
 
-const buildFeatureSummary = (design: MonsterDesign): string => {
-  const traits = [
-    EAR_LABELS[design.features.earShape],
-    TAIL_LABELS[design.features.tailShape],
-    design.features.whiskers ? 'moustaches' : 'sans moustaches',
-    MUZZLE_LABELS[design.features.muzzle],
-    MARKING_LABELS[design.features.markings],
-    BODY_SHAPE_LABELS[design.bodyShape]
+const buildFeatureSummary = (traits: MonsterTraits): string => {
+  const features = [
+    BODY_STYLE_LABELS[traits.bodyStyle],
+    EYE_STYLE_LABELS[traits.eyeStyle],
+    ANTENNA_STYLE_LABELS[traits.antennaStyle],
+    ACCESSORY_LABELS[traits.accessory]
   ]
 
-  return traits.filter((trait) => trait !== undefined && trait.length > 0).slice(0, 3).join(' · ')
+  return features.filter((feature) => feature !== undefined && feature.length > 0).slice(0, 3).join(' · ')
 }
 
 interface MonstersListProps {
@@ -154,7 +131,7 @@ function MonstersList ({ monsters, className }: MonstersListProps): React.ReactN
 
       <div className='grid gap-6 sm:grid-cols-2 xl:grid-cols-3'>
         {monsters.map((monster) => {
-          const design = parseMonsterDesign(monster.draw)
+          const traits = parseMonsterTraits(monster.traits)
           const state = isMonsterState(monster.state) ? monster.state : DEFAULT_MONSTER_STATE
           const adoptionDate = formatAdoptionDate(monster.createdAt ?? monster.updatedAt)
           const cardKey = monster.id ?? monster._id ?? monster.name
@@ -170,7 +147,9 @@ function MonstersList ({ monsters, className }: MonstersListProps): React.ReactN
 
               <div className='relative flex flex-col gap-5'>
                 <div className='relative flex items-center justify-center overflow-hidden rounded-3xl bg-slate-50/70 p-4 ring-1 ring-white/70'>
-                  <MonsterPreview design={design} state={state} width={200} height={200} />
+                  {traits !== null && (
+                    <PixelMonster traits={traits} state={state} level={levelLabel} />
+                  )}
                   <span className={`absolute right-4 top-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${STATE_BADGE_CLASSES[state]}`}>
                     <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
                     {MONSTER_STATE_LABELS[state]}
@@ -192,28 +171,20 @@ function MonstersList ({ monsters, className }: MonstersListProps): React.ReactN
                   </div>
 
                   <div className='flex flex-wrap gap-2 text-xs text-slate-600'>
-                    {design !== null && (
-                      <span className='inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 font-medium ring-1 ring-inset ring-slate-200'>
-                        <span aria-hidden='true'>🎨</span>
-                        {DESIGN_STYLE_LABELS[design.style]}
-                      </span>
-                    )}
-                    {design !== null && (
-                      <span className='inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 font-medium ring-1 ring-inset ring-slate-200'>
-                        <span aria-hidden='true'>🧬</span>
-                        {VARIANT_LABELS[design.variant]}
-                      </span>
-                    )}
+                    <span className='inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 font-medium ring-1 ring-inset ring-slate-200'>
+                      <span aria-hidden='true'>🎨</span>
+                      Pixel art dynamique
+                    </span>
                     <span className='inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 font-medium ring-1 ring-inset ring-slate-200'>
                       <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
                       {MONSTER_STATE_LABELS[state]}
                     </span>
                   </div>
 
-                  {design !== null && (
+                  {traits !== null && (
                     <div className='rounded-2xl bg-white/80 p-3 text-sm text-slate-600 shadow-inner'>
                       <p className='font-medium text-slate-800'>Signature</p>
-                      <p className='mt-1 leading-snug'>{buildFeatureSummary(design)}</p>
+                      <p className='mt-1 leading-snug'>{buildFeatureSummary(traits)}</p>
                     </div>
                   )}
                 </div>
