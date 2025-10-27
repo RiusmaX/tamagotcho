@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { getMonsters, updateMonsterState } from '@/actions/monsters.actions'
+import { updateMonsterState } from '@/actions/monsters.actions'
 
 export default function SwRegister (): null {
   const router = useRouter()
@@ -47,26 +47,29 @@ export default function SwRegister (): null {
           if (data.type === 'UPDATE_MONSTER_STATE') {
             // Determine current creature id from the URL: /creature/:id
             try {
-              const monsters = await getMonsters()
+              const pathname = String(window.location.pathname)
+              const parts = pathname.split('/').filter(Boolean)
+              const creatureIndex = parts.indexOf('creature')
+              const id = (creatureIndex !== -1 && parts.length > creatureIndex + 1)
+                ? String(parts[creatureIndex + 1])
+                : ''
 
-              for (const monster of monsters) {
-                const id = String(monster._id)
-                if (id === '' || id === null) {
-                  // Not on a creature page -> nothing to update
-                  return
-                }
-                // Call the server action which updates the monster state
+              if (id === '' || id === null) {
+                // Not on a creature page -> nothing to update
+                return
+              }
+
+              // Call the server action which updates the monster state
+              try {
+                await updateMonsterState(id)
+                // After the server action completes, refresh server components to pick up new state
                 try {
-                  await updateMonsterState(id)
-                  // After the server action completes, refresh server components to pick up new state
-                  try {
-                    router.refresh()
-                  } catch (err) {
-                    console.warn('[client] router.refresh failed', err)
-                  }
+                  router.refresh()
                 } catch (err) {
-                  console.error('[client] updateMonsterState action failed', err)
+                  console.warn('[client] router.refresh failed', err)
                 }
+              } catch (err) {
+                console.error('[client] updateMonsterState action failed', err)
               }
             } catch (err) {
               console.error('[client] failed to determine monster id or call API', err)

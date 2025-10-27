@@ -179,6 +179,7 @@ export async function updateMonsterState (monsterId: string): Promise<void> {
     { state: randomState }
   ).orFail()
   console.log(`Résultat de la mise à jour en base de données : ${result}`)
-  // revalidatePath('/creature/' + monsterId)
-  // revalidatePath('/dashboard')
+  revalidatePath('/creature/' + monsterId)
+  revalidatePath('/dashboard')
+  revalidatePath('/')
 }
