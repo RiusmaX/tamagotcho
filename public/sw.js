@@ -22,6 +22,12 @@ function startRecurringLog () {
 
     self._tamagotchoInterval = setInterval(() => {
       console.log('[SW] tick', new Date().toISOString())
+      // Update monster state
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({ type: 'UPDATE_MONSTER_STATE' })
+        })
+      })
     }, 10_000)
   } catch (err) {
     console.error('[SW] failed to start interval', err)
