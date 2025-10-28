@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth'
 import { stripe } from '@/lib/stripe'
+import { pricingTable } from '@/config/pricing'
 import { headers } from 'next/headers'
 
 export async function POST (request: Request): Promise<Response> {
@@ -11,7 +12,13 @@ export async function POST (request: Request): Promise<Response> {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  const amount = 1000
+  const { amount } = await request.json()
+
+  const product = pricingTable[amount]
+
+  if (product === undefined || product === null) {
+    return new Response('Product not found', { status: 404 })
+  }
 
   const checkoutSession = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -19,10 +26,8 @@ export async function POST (request: Request): Promise<Response> {
       {
         price_data: {
           currency: 'eur',
-          product_data: {
-            name: '500 Koins'
-          },
-          unit_amount: amount
+          product: product.productId,
+          unit_amount: product.price * 100
         },
         quantity: 1
       }
