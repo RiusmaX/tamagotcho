@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { authClient } from '@/lib/auth-client'
-import { createMonster } from '@/actions/monsters.actions'
+import { createMonster, getMonsters } from '@/actions/monsters.actions'
 import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
 import type { DBMonster } from '@/types/monster'
 import {
@@ -43,7 +43,7 @@ type Session = typeof authClient.$Infer.Session
  */
 function DashboardContent ({ session, monsters }: { session: Session, monsters: DBMonster[] }): React.ReactNode {
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const [monsterList, setMonsterList] = useState<DBMonster[]>(monsters)
   // Extraction des informations utilisateur
   const userDisplay = useUserDisplay(session)
 
@@ -54,6 +54,20 @@ function DashboardContent ({ session, monsters }: { session: Session, monsters: 
 
   // Génération des quêtes
   const quests = useQuests(stats)
+
+  useEffect(() => {
+    const fetchAndUpdateMonsters = async (): Promise<void> => {
+      const response = await fetch('/api/monsters')
+      const updatedMonsters = await response.json()
+      setMonsterList(updatedMonsters)
+    }
+
+    const interval = setInterval(() => {
+      void fetchAndUpdateMonsters()
+    }, 1000) // Met à jour toutes les 60 secondes
+
+    return () => clearInterval(interval)
+  }, [])
 
   /**
    * Déconnecte l'utilisateur et redirige vers la page de connexion
@@ -140,7 +154,7 @@ function DashboardContent ({ session, monsters }: { session: Session, monsters: 
         {/* Section grille principale : liste des monstres + sidebar */}
         <section className='mt-12 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]'>
           <div>
-            <MonstersList monsters={monsters} className='mt-0' />
+            <MonstersList monsters={monsterList} className='mt-0' />
           </div>
 
           <aside className='flex flex-col gap-6'>
