@@ -3,7 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { connectToDatabase, updateMonstersStates } from './db.js'
 
-dotenv.config({ path: '../.env.local' })
+dotenv.config({ path: '../../.env.local' })
 
 const app = express()
 const PORT = process.env.PORT || 3001
