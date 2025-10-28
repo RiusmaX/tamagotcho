@@ -1,4 +1,5 @@
 import { getStateLabel } from '@/lib/utils'
+import { XpProgressBar } from './xp-progress-bar'
 
 /**
  * Props pour le composant StatItem
@@ -37,12 +38,20 @@ export function StatItem ({ label, value }: StatItemProps): React.ReactNode {
 interface CreatureStatsPanelProps {
   /** Niveau du monstre */
   level: number
+  /** XP actuel du monstre */
+  xp: number
+  /** XP maximum pour le niveau actuel */
+  maxXp: number
   /** État du monstre */
   state: string
   /** Date de création (timestamp ou string) */
   createdAt: string | Date
   /** Date de dernière mise à jour (timestamp ou string) */
   updatedAt: string | Date
+  /** Si true, affiche l'animation de gain d'XP */
+  showXpGain?: boolean
+  /** Montant d'XP gagné (pour l'animation) */
+  xpGained?: number
 }
 
 /**
@@ -66,9 +75,13 @@ interface CreatureStatsPanelProps {
  */
 export function CreatureStatsPanel ({
   level,
+  xp,
+  maxXp,
   state,
   createdAt,
-  updatedAt
+  updatedAt,
+  showXpGain = false,
+  xpGained = 0
 }: CreatureStatsPanelProps): React.ReactNode {
   return (
     <div className='bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-4 border-moccaccino-200'>
@@ -76,6 +89,17 @@ export function CreatureStatsPanel ({
         Statistiques
       </h2>
       <div className='space-y-3'>
+        {/* Barre d'XP avec animations */}
+        <div className='mb-4'>
+          <XpProgressBar
+            currentXp={xp}
+            maxXp={maxXp}
+            level={level}
+            showXpGain={showXpGain}
+            xpGained={xpGained}
+          />
+        </div>
+
         <StatItem label='Niveau' value={level.toString()} />
         <StatItem label='État' value={getStateLabel(state)} />
         <StatItem
