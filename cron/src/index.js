@@ -65,3 +65,5 @@ const server = app.listen(PORT, () => {
   process.on('SIGINT', () => shutdown('SIGINT'))
   process.on('SIGTERM', () => shutdown('SIGTERM'))
 })
+
+export default app
