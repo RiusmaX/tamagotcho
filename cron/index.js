@@ -3,13 +3,17 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { connectToDatabase, updateMonstersStates } from './db.js'
 
-dotenv.config({ path: '../../.env.local' })
+dotenv.config({ path: '../.env.local' })
 
 const app = express()
 const PORT = process.env.PORT || 3001
 app.use(cors())
 
 connectToDatabase()
+
+app.get('/', (req, res) => {
+  res.status(200).send('Hello from the cron server!')
+})
 
 app.get('/health', (req, res) => {
   res.status(200).send('Server is healthy')
