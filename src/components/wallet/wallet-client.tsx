@@ -183,13 +183,13 @@ export default function WalletClient ({ initialWallet }: WalletClientProps): Rea
           {packages.map((pkg) => (
             <div
               key={pkg.amount}
-              className={`group relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-white via-pink-50 to-purple-100 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.15)] ring-4 ring-white/80 transition-all duration-300 hover:scale-105 hover:shadow-[0_30px_90px_rgba(0,0,0,0.25)] ${
+              className={`group relative rounded-[2rem] bg-gradient-to-br from-white via-pink-50 to-purple-100 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.15)] ring-4 ring-white/80 transition-all duration-300 hover:scale-105 hover:shadow-[0_30px_90px_rgba(0,0,0,0.25)] ${
                 pkg.popular ? 'ring-8 ring-yellow-400 transform scale-105' : ''
               }`}
             >
               {/* Badge populaire */}
               {pkg.popular && (
-                <div className='absolute -top-4 -right-4'>
+                <div className='absolute -top-6 -right-6 z-20'>
                   <div className='bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-black text-sm px-6 py-2 rounded-full shadow-xl ring-4 ring-white transform rotate-12 animate-bounce'>
                     ⭐ {pkg.badge} ⭐
                   </div>
@@ -198,7 +198,7 @@ export default function WalletClient ({ initialWallet }: WalletClientProps): Rea
 
               {/* Badge du pack */}
               {!pkg.popular && (
-                <div className='absolute top-4 right-4'>
+                <div className='absolute top-4 right-4 z-10'>
                   <div className={`bg-gradient-to-r ${pkg.color} text-white font-black text-xs px-4 py-2 rounded-full shadow-lg`}>
                     {pkg.badge}
                   </div>
@@ -206,7 +206,7 @@ export default function WalletClient ({ initialWallet }: WalletClientProps): Rea
               )}
 
               {/* Bulles décoratives */}
-              <div className='pointer-events-none absolute -right-8 top-8 h-24 w-24 rounded-full bg-gradient-to-br from-yellow-300/30 to-orange-300/30 blur-xl group-hover:scale-150 transition-transform duration-500' />
+              <div className='pointer-events-none absolute -right-8 top-8 h-24 w-24 rounded-full bg-gradient-to-br from-yellow-300/30 to-orange-300/30 blur-xl group-hover:scale-150 transition-transform duration-500 overflow-hidden' />
 
               {/* Contenu */}
               <div className='relative text-center'>
