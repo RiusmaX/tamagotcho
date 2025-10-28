@@ -9,25 +9,29 @@ interface StatItemProps {
   label: string
   /** Valeur de la statistique */
   value: string
+  /** Emoji associé */
+  emoji: string
+  /** Couleur du gradient */
+  color: string
 }
 
 /**
- * Élément de statistique (ligne label/valeur)
+ * Élément de statistique (ligne label/valeur) - Version Jeu Vidéo Fun
  *
  * Responsabilité unique : afficher une paire label/valeur
- * dans un format de ligne de statistique.
+ * dans un format de ligne de statistique coloré et fun.
  *
  * @param {StatItemProps} props - Props du composant
  * @returns {React.ReactNode} Ligne de statistique
- *
- * @example
- * <StatItem label="Niveau" value="5" />
  */
-export function StatItem ({ label, value }: StatItemProps): React.ReactNode {
+export function StatItem ({ label, value, emoji, color }: StatItemProps): React.ReactNode {
   return (
-    <div className='flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0'>
-      <span className='text-gray-600 font-medium'>{label}</span>
-      <span className='text-gray-900 font-bold'>{value}</span>
+    <div className={`flex justify-between items-center py-4 px-6 rounded-2xl bg-gradient-to-r ${color} shadow-lg ring-2 ring-white/50 transform hover:scale-105 transition-all duration-300`}>
+      <div className='flex items-center gap-3'>
+        <span className='text-3xl'>{emoji}</span>
+        <span className='text-white font-bold text-lg'>{label}</span>
+      </div>
+      <span className='text-white font-black text-xl'>{value}</span>
     </div>
   )
 }
@@ -55,23 +59,18 @@ interface CreatureStatsPanelProps {
 }
 
 /**
- * Panneau d'affichage des statistiques du monstre
+ * Panneau d'affichage des statistiques du monstre - Version Jeu Vidéo Fun
  *
  * Responsabilité unique : afficher toutes les statistiques
- * du monstre dans un panneau formaté.
+ * du monstre dans un panneau formaté super coloré.
  *
- * Applique SRP en déléguant l'affichage de chaque stat à StatItem.
+ * Nouveau design :
+ * - Cartes colorées individuelles
+ * - Émojis partout
+ * - Animations hover
  *
  * @param {CreatureStatsPanelProps} props - Props du composant
  * @returns {React.ReactNode} Panneau de statistiques
- *
- * @example
- * <CreatureStatsPanel
- *   level={5}
- *   state="happy"
- *   createdAt="2025-10-27T10:00:00Z"
- *   updatedAt="2025-10-27T12:00:00Z"
- * />
  */
 export function CreatureStatsPanel ({
   level,
@@ -84,13 +83,22 @@ export function CreatureStatsPanel ({
   xpGained = 0
 }: CreatureStatsPanelProps): React.ReactNode {
   return (
-    <div className='bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-4 border-moccaccino-200'>
-      <h2 className='text-2xl font-bold text-moccaccino-600 mb-4'>
-        Statistiques
-      </h2>
-      <div className='space-y-3'>
+    <div className='relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-white via-yellow-50 to-orange-100 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.2)] ring-8 ring-white/80'>
+      {/* Effet de fond */}
+      <div className='pointer-events-none absolute inset-0 bg-gradient-to-br from-yellow-200/20 via-orange-200/20 to-red-200/20 animate-pulse-slow' />
+
+      <div className='relative'>
+        {/* Titre du panneau */}
+        <div className='text-center mb-8'>
+          <h2 className='text-4xl font-black text-transparent bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text flex items-center justify-center gap-3'>
+            <span className='text-5xl'>📊</span>
+            Statistiques
+            <span className='text-5xl'>📊</span>
+          </h2>
+        </div>
+
         {/* Barre d'XP avec animations */}
-        <div className='mb-4'>
+        <div className='mb-8'>
           <XpProgressBar
             currentXp={xp}
             maxXp={maxXp}
@@ -100,17 +108,45 @@ export function CreatureStatsPanel ({
           />
         </div>
 
-        <StatItem label='Niveau' value={level.toString()} />
-        <StatItem label='État' value={getStateLabel(state)} />
-        <StatItem
-          label='Date de création'
-          value={new Date(createdAt).toLocaleDateString('fr-FR')}
-        />
-        <StatItem
-          label='Dernière mise à jour'
-          value={new Date(updatedAt).toLocaleDateString('fr-FR')}
-        />
+        {/* Statistiques en cartes colorées */}
+        <div className='space-y-4'>
+          <StatItem
+            label='Niveau'
+            value={level.toString()}
+            emoji='⭐'
+            color='from-yellow-400 to-orange-500'
+          />
+          <StatItem
+            label='État'
+            value={getStateLabel(state)}
+            emoji='💖'
+            color='from-pink-400 to-rose-500'
+          />
+          <StatItem
+            label='Adopté le'
+            value={new Date(createdAt).toLocaleDateString('fr-FR')}
+            emoji='📅'
+            color='from-blue-400 to-cyan-500'
+          />
+          <StatItem
+            label='Dernière activité'
+            value={new Date(updatedAt).toLocaleDateString('fr-FR')}
+            emoji='🔄'
+            color='from-purple-400 to-indigo-500'
+          />
+        </div>
       </div>
+
+      {/* Styles pour les animations */}
+      <style jsx>{`
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
+        }
+
+        .animate-pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+      `}
+      </style>
     </div>
   )
 }
