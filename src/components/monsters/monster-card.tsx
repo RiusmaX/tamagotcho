@@ -103,7 +103,7 @@ export function MonsterCard ({
               </div>
               <span className='inline-flex items-center gap-1 rounded-full bg-moccaccino-100/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-moccaccino-600 shadow-inner'>
                 <span aria-hidden='true'>⭐</span>
-                Niveau {levelLabel}
+                LVL {levelLabel}
               </span>
             </div>
           </div>
