@@ -23,8 +23,7 @@ export async function POST (req: Request): Promise<Response> {
 
       const wallet = await Wallet.findOne({ ownerId: event?.data?.object?.metadata?.userId })
       if (wallet !== null && wallet !== undefined) {
-        const amountPaid = (event?.data?.object?.amount_total ?? 0) / 100
-        const entry = Object.entries(pricingTable).find(([_, pkg]) => pkg.price === amountPaid)
+        const entry = Object.entries(pricingTable).find(([_, pkg]) => pkg.productId === event?.data?.object?.metadata?.productId)
 
         if (entry !== undefined) {
           const koinsToAdd = Number(entry[0])
