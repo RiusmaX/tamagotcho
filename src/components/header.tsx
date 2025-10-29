@@ -4,8 +4,13 @@ import Image from 'next/image'
 import Button from '@/components/button'
 import type { NavigationItem } from '@/types/components'
 
+interface HeaderProps {
+  /** Indique si l'utilisateur est connecté */
+  isLoggedIn?: boolean
+}
+
 // Single Responsibility: Header handles only navigation and branding
-export default function Header (): React.ReactNode {
+export default function Header ({ isLoggedIn = false }: HeaderProps): React.ReactNode {
   const navigationItems: NavigationItem[] = [
     { href: '#hero', label: 'Accueil' },
     { href: '#benefits', label: 'Avantages' },
@@ -14,8 +19,8 @@ export default function Header (): React.ReactNode {
     { href: '#newsletter', label: 'Newsletter' }
   ]
 
-  const handleSignin = (): void => {
-    window.location.href = '/sign-in'
+  const handleCTA = (): void => {
+    window.location.href = isLoggedIn ? '/app' : '/sign-in'
   }
 
   return (
@@ -56,8 +61,8 @@ export default function Header (): React.ReactNode {
 
           {/* CTA Button */}
           <div className='flex items-center'>
-            <Button variant='primary' size='md' onClick={handleSignin}>
-              Créer mon monstre
+            <Button variant='primary' size='md' onClick={handleCTA}>
+              {isLoggedIn ? 'Mes monstres' : 'Créer mon monstre'}
             </Button>
           </div>
         </div>

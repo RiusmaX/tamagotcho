@@ -1,5 +1,5 @@
 // Clean Architecture: Presentation layer imports application components
-import Header from '@/components/header'
+import HeaderWrapper from '@/components/header-wrapper'
 import HeroSection from '@/components/hero-section'
 import BenefitsSection from '@/components/benefits-section'
 import MonstersSection from '@/components/monsters-section'
@@ -26,7 +26,7 @@ export const metadata: Readonly<Metadata> = {
 export default function Home (): React.ReactNode {
   return (
     <div className='font-sans'>
-      <Header />
+      <HeaderWrapper />
       <HeroSection />
       <BenefitsSection />
       <MonstersSection />

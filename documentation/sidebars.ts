@@ -33,6 +33,17 @@ const sidebars: SidebarsConfig = {
       items: [
         'authentication/auth-system'
       ]
+    },
+    {
+      type: 'category',
+      label: 'Système de Mise à Jour Automatique',
+      items: [
+        'cron/overview',
+        'cron/quickstart',
+        'cron/configuration',
+        'cron/api-reference',
+        'cron/troubleshooting'
+      ]
     }
   ]
 }
