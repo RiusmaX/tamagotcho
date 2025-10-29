@@ -2,6 +2,7 @@
 
 import type React from 'react'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import { xpBoosts } from '@/config/shop.config'
 import { XPBoostCard } from './xp-boost-card'
 import { buyXpBoost } from '@/actions/shop.actions'
@@ -46,16 +47,40 @@ export function ShopModal ({ onClose, creatureName, creatureId }: ShopModalProps
   const handlePurchase = async (boostId: string): Promise<void> => {
     setIsPurchasing(true)
     try {
-      // TODO: Implémenter l'appel API pour acheter le boost
       console.log(`Achat du boost ${boostId} pour la créature ${creatureId}`)
 
       await buyXpBoost(creatureId, boostId)
 
-      // TODO: Afficher un message de succès et mettre à jour l'XP de la créature
-      alert('Boost d\'XP acheté avec succès ! 🎉')
+      // Afficher un toast de succès
+      toast.success('Boost d\'XP acheté avec succès ! 🎉', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      })
+
+      // Fermer la boutique après un court délai pour laisser l'utilisateur voir le toast
+      setTimeout(() => {
+        onClose()
+      }, 500)
     } catch (error) {
       console.error('Erreur lors de l\'achat du boost:', error)
-      alert('Erreur lors de l\'achat du boost 😢')
+
+      // Afficher un toast d'erreur avec plus de détails si disponibles
+      const errorMessage = error instanceof Error
+        ? error.message
+        : 'Erreur lors de l\'achat du boost 😢'
+
+      toast.error(errorMessage, {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      })
     } finally {
       setIsPurchasing(false)
     }
